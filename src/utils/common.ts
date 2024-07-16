@@ -35,7 +35,7 @@ export const updateSync = (book: GroupedClipping) => {
       {
         title: book.title,
         author: book.author,
-        highlightCount: bookSync.highlightCount + book.highlights.length,
+        contentCount: bookSync.contentCount + book.contents.length,
       },
     ];
   } else {
@@ -44,7 +44,7 @@ export const updateSync = (book: GroupedClipping) => {
       {
         title: book.title,
         author: book.author,
-        highlightCount: book.highlights.length,
+        contentCount: book.contents.length,
       },
     ];
   }
@@ -76,11 +76,11 @@ export const getUnsyncedHighlights = (books: GroupedClipping[]) => {
       // if the book was synced earlier
       if (bookSync) {
         // if new highlights have been added to the book
-        if (book.highlights.length > bookSync.highlightCount) {
+        if (book.contents.length > bookSync.contentCount) {
           // only new highlights should be synced
           unsyncedHighlights.push({
             ...book,
-            highlights: book.highlights.slice(bookSync.highlightCount),
+            contents: book.contents.slice(bookSync.contentCount),
           });
         } else {
           console.log(`📖 ${book.title}`);

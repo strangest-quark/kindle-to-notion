@@ -1,17 +1,19 @@
 export interface Clipping {
   title: string;
   author: string;
-  highlight: string;
+  kind: "highlight" | "note" | "bookmark";
+  content: string;
 }
 
 export interface GroupedClipping {
   title: string;
   author: string;
-  highlights: string[];
+  kinds: string[];
+  contents: string[];
 }
 
 export interface Sync {
   title: string;
   author: string;
-  highlightCount: number;
+  contentCount: number;
 }

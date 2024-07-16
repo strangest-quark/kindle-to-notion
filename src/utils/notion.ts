@@ -2,41 +2,57 @@ import { Block, BlockType, CreatePageProperties } from "../interfaces";
 
 /* Function to make an array of Notion blocks given the array of highlights and the block type
    Used when appending highlights to an existing Notion page for the book */
-export const makeBlocks = (highlights: string[], type: BlockType): Block[] => {
+export const makeBlocks = (kinds: string[], contents: string[]): Block[] => {
   const blocks: Block[] = [];
-  for (const highlight of highlights) {
-    // truncate the highlight to a maximum length of 2000 character due to Notion API limitation
-    const validHighlight =
-      highlight.length > 2000 ? highlight.substring(0, 2000) : highlight;
+  for (let i = 0; i < contents.length; i++) {
+    const kind = kinds[i];
+
+    let type = BlockType.paragraph;
+    if (kind == "note") {
+      type = BlockType.callout;
+    }
+    if (kind == "bookmark") {
+      type = BlockType.divider;
+    }
+    const content = contents[i];
+    // truncate the content to a maximum length of 2000 character due to Notion API limitation
+    const validContent =
+      content.length > 2000 ? content.substring(0, 2000) : content;
     const block: Block = {
       object: "block",
       type,
     };
-    block[type] = {
-      text: [
-        {
-          type: "text",
-          text: {
-            content: validHighlight,
-            link: null,
+    if (kind == "bookmark") {
+      type = BlockType.divider;
+      block[type] = {
+      }
+    } else {
+      block[type] = {
+        text: [
+          {
+            type: "text",
+            text: {
+              content: validContent,
+              link: null,
+            },
           },
-        },
-      ],
-    };
+        ],
+      };
+    }
     blocks.push(block);
   }
   return blocks;
 };
 
-/* Function to make an array of Notion blocks with a title: " 🎀 Highlights". 
+
+/* Function to make an array of Notion blocks.
    Used when creating a new Notion page for the book*/
 export const makeHighlightsBlocks = (
-  highlights: string[],
-  type: BlockType
+  kinds: string[],
+  highlights: string[]
 ): Block[] => {
   return [
-    ...makeBlocks([" 🎀 Highlights"], BlockType.heading_1),
-    ...makeBlocks(highlights, type),
+    ...makeBlocks(kinds, highlights),
   ];
 };
 

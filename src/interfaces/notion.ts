@@ -9,7 +9,9 @@ interface Text {
 }
 
 export enum BlockType {
+  callout = "callout",
   quote = "quote",
+  divider = "divider",
   heading_1 = "heading_1",
   heading_2 = "heading_2",
   heading_3 = "heading_3",
@@ -25,7 +27,9 @@ export enum Emoji {
 export interface Block {
   object: "block";
   type: BlockType;
+  divider?: {};
   quote?: Text;
+  callout?: Text;
   paragraph?: Text;
   heading_1?: Text;
   heading_2?: Text;
